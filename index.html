@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Hunt - Classic Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>DUCK HUNT</h1>
+            <div class="game-info">
+                <div class="info-item">
+                    <span class="label">SCORE:</span>
+                    <span id="score" class="value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">DUCKS HIT:</span>
+                    <span id="ducksHitDisplay" class="value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">MISSED:</span>
+                    <span id="missedDisplay" class="value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">COMBO:</span>
+                    <span id="comboDisplay" class="value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="gameCanvas" class="game-canvas">
+            <div class="sky"></div>
+            <div class="ground"></div>
+            <div id="ducksContainer"></div>
+            
+            <!-- Start Screen -->
+            <div id="startScreen" class="start-screen">
+                <h2>DUCK HUNT</h2>
+                <p>🦆 Click on the ducks to shoot them!</p>
+                <p>🎯 Unlimited ammo - endless gameplay!</p>
+                <p>💥 Build combos for bonus points!</p>
+                <p>⚡ Don't let them escape!</p>
+                <button id="startBtn" class="btn">START GAME</button>
+            </div>
+
+            <!-- Pause Screen -->
+            <div id="pauseScreen" class="pause-screen hidden">
+                <h2>PAUSED</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <p>Ducks Hit: <span id="totalHit">0</span></p>
+                <p>Ducks Missed: <span id="totalMissed">0</span></p>
+                <button id="resumeBtn" class="btn">RESUME</button>
+                <button id="restartBtn" class="btn btn-secondary">RESTART</button>
+            </div>
+
+            <!-- Certificate Screen -->
+            <div id="certificateScreen" class="certificate-screen hidden">
+                <div class="certificate-container">
+                    <div class="certificate-border">
+                        <div class="certificate-header">
+                            <h1>🏆 MASTER HUNTER 🏆</h1>
+                            <div class="certificate-seal">★</div>
+                        </div>
+                        <div class="certificate-body">
+                            <p class="certificate-text">This certifies that</p>
+                            <h2 class="certificate-name">EXPERT MARKSMAN</h2>
+                            <p class="certificate-text">has successfully hunted</p>
+                            <h3 class="certificate-achievement">100 DUCKS</h3>
+                            <p class="certificate-text">demonstrating exceptional skill, precision, and dedication</p>
+                            <div class="certificate-stats">
+                                <p>Score: <span id="certScore">0</span></p>
+                                <p>Accuracy: <span id="certAccuracy">0</span>%</p>
+                                <p>Max Combo: <span id="certCombo">0</span>x</p>
+                            </div>
+                            <div class="certificate-footer">
+                                <div class="certificate-signature">
+                                    <p>___________________</p>
+                                    <p class="signature-title">Duck Hunt Official</p>
+                                </div>
+                                <div class="certificate-date">
+                                    <p id="certDate">October 16, 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="continueCertBtn" class="btn">CONTINUE HUNTING</button>
+                    <button id="downloadCertBtn" class="btn btn-secondary">DOWNLOAD CERTIFICATE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <p class="hint">🎯 Click on ducks to shoot! Endless mode - see how high you can score!</p>
+            <button id="pauseBtn" class="btn btn-small">PAUSE</button>
+            <button id="debugBtn" class="btn btn-small">DEBUG</button>
+        </div>
+    </div>
+
+    <!-- Debug Panel -->
+    <div id="debugPanel" class="debug-panel hidden">
+        <div class="debug-header">
+            <h3>🔧 DEBUG PANEL</h3>
+            <button id="closeDebugBtn" class="debug-close">✖</button>
+        </div>
+        <div class="debug-content">
+            <!-- Score Controls -->
+            <div class="debug-section">
+                <h4>📊 Score & Stats</h4>
+                <div class="debug-control">
+                    <label>Score:</label>
+                    <input type="number" id="debugScore" value="0" min="0" step="100">
+                    <button class="debug-apply" onclick="applyDebugValue('score')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Ducks Hit:</label>
+                    <input type="number" id="debugDucksHit" value="0" min="0">
+                    <button class="debug-apply" onclick="applyDebugValue('ducksHit')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Ducks Missed:</label>
+                    <input type="number" id="debugDucksMissed" value="0" min="0">
+                    <button class="debug-apply" onclick="applyDebugValue('ducksMissed')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Current Combo:</label>
+                    <input type="number" id="debugCombo" value="0" min="0">
+                    <button class="debug-apply" onclick="applyDebugValue('combo')">Apply</button>
+                </div>
+            </div>
+
+            <!-- Speed Controls -->
+            <div class="debug-section">
+                <h4>⚡ Speed Settings</h4>
+                <div class="debug-control">
+                    <label>Duck Speed:</label>
+                    <input type="number" id="debugDuckSpeed" value="2" min="0.1" max="20" step="0.5">
+                    <button class="debug-apply" onclick="applyDebugValue('duckSpeed')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Spawn Rate (ms):</label>
+                    <input type="number" id="debugSpawnRate" value="2000" min="100" max="10000" step="100">
+                    <button class="debug-apply" onclick="applyDebugValue('spawnRate')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Duck Lifetime (ms):</label>
+                    <input type="number" id="debugDuckLifetime" value="10000" min="1000" max="30000" step="1000">
+                    <button class="debug-apply" onclick="applyDebugValue('duckLifetime')">Apply</button>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="debug-section">
+                <h4>🎮 Game Settings</h4>
+                <div class="debug-control">
+                    <label>Max Active Ducks:</label>
+                    <input type="number" id="debugMaxDucks" value="8" min="1" max="50">
+                    <button class="debug-apply" onclick="applyDebugValue('maxDucks')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Difficulty Multiplier:</label>
+                    <input type="number" id="debugDifficulty" value="1" min="0.1" max="10" step="0.1">
+                    <button class="debug-apply" onclick="applyDebugValue('difficulty')">Apply</button>
+                </div>
+                <div class="debug-control">
+                    <label>Base Points:</label>
+                    <input type="number" id="debugBasePoints" value="100" min="1" max="10000" step="10">
+                    <button class="debug-apply" onclick="applyDebugValue('basePoints')">Apply</button>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="debug-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="debug-buttons">
+                    <button class="debug-action-btn" onclick="debugAction('setCertificate')">Get Certificate (100 Ducks)</button>
+                    <button class="debug-action-btn" onclick="debugAction('maxSpeed')">Max Speed Mode</button>
+                    <button class="debug-action-btn" onclick="debugAction('slowMode')">Slow Motion</button>
+                    <button class="debug-action-btn" onclick="debugAction('clearDucks')">Clear All Ducks</button>
+                    <button class="debug-action-btn" onclick="debugAction('spawn10')">Spawn 10 Ducks</button>
+                    <button class="debug-action-btn" onclick="debugAction('godMode')">God Mode (10000 Score)</button>
+                    <button class="debug-action-btn" onclick="debugAction('resetAll')">Reset All Values</button>
+                </div>
+            </div>
+
+            <!-- Info Display -->
+            <div class="debug-section">
+                <h4>📋 Current Values</h4>
+                <div class="debug-info">
+                    <p>Active Ducks: <span id="debugActiveDucks">0</span></p>
+                    <p>Current Speed: <span id="debugCurrentSpeed">2</span></p>
+                    <p>Current Spawn Rate: <span id="debugCurrentSpawn">2000</span>ms</p>
+                    <p>Certificate Awarded: <span id="debugCertStatus">No</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
