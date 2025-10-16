@@ -47,10 +47,10 @@ A comprehensive debug panel for testing and experimentation:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/duck-hunt-game.git
+git clone https://github.com/suylakan/duck-hunt.git
 
 # Navigate to the directory
-cd duck-hunt-game
+cd duck-hunt
 
 # Open in browser
 # Simply double-click index.html or use a local server
@@ -237,3 +237,4 @@ Contributions, issues, and feature requests are welcome!
 **Enjoy the hunt! 🦆🎯**
 
 *Try to beat your high score and unlock the Master Hunter Certificate!*
+
